@@ -14,14 +14,15 @@ resource "aws_subnet" "this" {
 resource "aws_route_table" "this" {
   vpc_id = var.vpc_id
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = var.igw_id
-  }
-
   tags = {
     "ManagedBy" = "Terraform"
   }
+}
+
+resource "aws_route" "igw" {
+  route_table_id         = aws_route_table.this.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = var.igw_id
 }
 
 resource "aws_route_table_association" "this" {
